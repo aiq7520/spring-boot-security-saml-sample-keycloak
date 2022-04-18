@@ -28,6 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.saml.metadata.MetadataManager;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -47,7 +48,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestConfig.class})
-@SpringBootTest
+@WebAppConfiguration
+@TestPropertySource(locations = {"classpath:application.properties"})
 public class SSOControllerTest extends CommonTestSupport {
 
     private static final Set<String> IDPS =
