@@ -120,18 +120,14 @@ public abstract class AbstractBaseDao<T> implements BaseDao<T> {
 
     @Override
     public int count(String jpql,Object... obj) {
-        try{
-            Query query = em.createQuery(jpql);
-            if(obj.length > 0){
-                for (int i = 0; i < obj.length; i++) {
-                    query.setParameter((i+1),obj[i]);
-                }
+        Query query = em.createQuery(jpql);
+        if(obj.length > 0){
+            for (int i = 0; i < obj.length; i++) {
+                query.setParameter((i+1),obj[i]);
             }
-            Long num = (Long)query.getSingleResult();
-            return num.intValue();
-        }catch (Exception e){
-            return 0;
         }
+        Long num = (Long)query.getSingleResult();
+        return num.intValue();
     }
 
     @Override

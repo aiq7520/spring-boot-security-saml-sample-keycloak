@@ -1,6 +1,9 @@
 package com.vdenotaris.spring.boot.security.saml.web.entity;
 
 
+import lombok.Data;
+
+import javax.persistence.*;
 
 /**
  * @Classname SysUser
@@ -8,24 +11,29 @@ package com.vdenotaris.spring.boot.security.saml.web.entity;
  * @Date 2022/4/18 13:43
  * @Created by ge.ji
  */
-//@Table
+@Table
+@Entity
+@Data
 public class SysUser {
     /** 用户ID */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** 用户账号 */
+    /** 用户名 */
     private String userName;
-
-
-    /** 用户邮箱 */
-    private String email;
-
-
-    /** 用户性别 */
-    private String sex;
 
     /** 密码 */
     private String password;
+
+    public SysUser(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+    }
+
+    public SysUser() {
+
+    }
 
     public Long getId() {
         return id;
@@ -41,22 +49,6 @@ public class SysUser {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
     }
 
     public String getPassword() {

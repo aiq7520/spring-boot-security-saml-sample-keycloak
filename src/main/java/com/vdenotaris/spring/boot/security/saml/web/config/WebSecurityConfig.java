@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 
+import com.vdenotaris.spring.boot.security.saml.web.common.exception.LoginFailureHandler;
+import com.vdenotaris.spring.boot.security.saml.web.core.MyAuthenticationSuccessHandler;
+import com.vdenotaris.spring.boot.security.saml.web.core.UsernamePasswordUserDetailServiceImpl;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.velocity.app.VelocityEngine;
@@ -47,6 +50,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.saml.SAMLAuthenticationProvider;
 import org.springframework.security.saml.SAMLBootstrap;
 import org.springframework.security.saml.SAMLDiscovery;
@@ -92,6 +98,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
@@ -109,8 +116,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
 	private Timer backgroundTaskTimer;
 	private MultiThreadedHttpConnectionManager multiThreadedHttpConnectionManager;
 
-//    @Value("${keycloak.clent.id}")
-    private String clienId="";
+    @Value("${keycloak.clent.id}")
+    private String clienId;
 
 
 
@@ -127,6 +134,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
 	
     @Autowired
     private SAMLUserDetailsServiceImpl samlUserDetailsServiceImpl;
+    @Autowired
+    private UserDetailsService userDetailsService;
      
     // Initialization of the velocity engine
     @Bean
@@ -160,6 +169,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
         samlAuthenticationProvider.setForcePrincipalAsString(false);
         return samlAuthenticationProvider;
     }
+
+
  
     // Provider of default SAML Context
     @Bean
@@ -266,14 +277,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
         idpDiscovery.setIdpSelectionPath("/saml/discovery");
         return idpDiscovery;
     }
-    
-//	@Bean
-//	@Qualifier("idp-ssocircle")
-//	public ExtendedMetadataDelegate ssoCircleExtendedMetadataProvider()
-//			throws MetadataProviderException {
-//		String idpSSOCircleMetadataURL = "https://idp.ssocircle.com/idp-meta.xml";
-//        return getExtendedMetadataDelegate(idpSSOCircleMetadataURL);
-//    }
+
 
     // IDP Metadata configuration - paths to metadata of IDPs in circle of trust
     // is here
@@ -282,7 +286,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
     @Qualifier("metadata")
     public CachingMetadataManager metadata(Environment env) throws MetadataProviderException {
         List<MetadataProvider> providers = new ArrayList<MetadataProvider>();
-//        providers.add(ssoCircleExtendedMetadataProvider());
         providers.add(keycloakExtendedMetadataProvider(env));
         return new CachingMetadataManager(providers);
     }
@@ -443,6 +446,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
     @Bean
     public FilterChainProxy samlFilter() throws Exception {
         List<SecurityFilterChain> chains = new ArrayList<SecurityFilterChain>();
+        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/login"),
+                usernamePasswordAuthenticationFilter()));
         chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/login/**"),
                 samlEntryPoint()));
         chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/logout/**"),
@@ -459,43 +464,65 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
                 samlIDPDiscovery()));
         return new FilterChainProxy(chains);
     }
-     
-    /**
-     * Returns the authentication manager currently used by Spring.
-     * It represents a bean definition with the aim allow wiring from
-     * other classes performing the Inversion of Control (IoC).
-     * 
-     * @throws  Exception 
-     */
+
     @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter()  throws Exception{
+        UsernamePasswordAuthenticationFilter authenticationFilter = new UsernamePasswordAuthenticationFilter();
+        authenticationFilter.setAuthenticationManager(authenticationManager());
+        authenticationFilter.setAuthenticationSuccessHandler(myAuthenticationSuccessHandler());
+        authenticationFilter.setAuthenticationFailureHandler(loginFailureHandler());
+        return authenticationFilter;
+    }
+    @Bean
+    public MyAuthenticationSuccessHandler myAuthenticationSuccessHandler(){
+        return new MyAuthenticationSuccessHandler();
+    }
+    //配置采用哪种密码加密算法
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        //不使用密码加密
+        return NoOpPasswordEncoder.getInstance();
+
+        //使用默认的BCryptPasswordEncoder加密方案
+//        return new BCryptPasswordEncoder();
+
+        //strength=10，即密钥的迭代次数(strength取值在4~31之间，默认为10)
+        //return new BCryptPasswordEncoder(10);
+
+        //利用工厂类PasswordEncoderFactories实现,工厂类内部采用的是委派密码编码方案.
+        //return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public LoginFailureHandler loginFailureHandler(){
+        return new LoginFailureHandler();
     }
      
+
     /**
-     * Defines the web based security configuration.
-     * 
-     * @param   http It allows configuring web based security for specific http requests.
-     * @throws  Exception 
-     */
+    * Defines the web based security configuration.
+    *
+    * @param   http It allows configuring web based security for specific http requests.
+    * @throws  Exception
+    */
     @Override  
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .httpBasic()
-                .authenticationEntryPoint(samlEntryPoint());      
+//        http
+//            .httpBasic()
+//                .authenticationEntryPoint(samlEntryPoint());
         http
         		.addFilterBefore(metadataGeneratorFilter(), ChannelProcessingFilter.class)
         		.addFilterAfter(samlFilter(), BasicAuthenticationFilter.class)
         		.addFilterBefore(samlFilter(), CsrfFilter.class);
         http        
             .authorizeRequests()
+                // 不需要  认证的 url
            		.antMatchers("/").permitAll()
            		.antMatchers("/saml/**").permitAll()
            		.antMatchers("/css/**").permitAll()
            		.antMatchers("/img/**").permitAll()
            		.antMatchers("/js/**").permitAll()
-                .antMatchers("/hello").permitAll()
+//                .antMatchers("/hello").permitAll()
            		.anyRequest().authenticated();
         http
         		.logout()
@@ -511,7 +538,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-            .authenticationProvider(samlAuthenticationProvider());
+            // saml 登录
+            .authenticationProvider(samlAuthenticationProvider())
+            // 用户名密码登录
+            .userDetailsService(userDetailsService);
     }
 
     @Override

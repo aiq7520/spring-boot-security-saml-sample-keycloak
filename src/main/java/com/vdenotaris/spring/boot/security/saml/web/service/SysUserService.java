@@ -16,9 +16,21 @@ public interface SysUserService {
      * @param user
      * @return
      */
-    SysUser register(SysUser user);
+    void register(SysUser user);
 
 
+    /**
+     * findByUserName
+     * @param username
+     * @return
+     */
+    SysUser findByUserName(String username);
+
+    /**
+     * deleted
+     * @param id
+     */
+    void deleted(Long id);
 
 
 }
