@@ -16,6 +16,7 @@
 
 package com.vdenotaris.spring.boot.security.saml.web.controllers;
 
+import com.vdenotaris.spring.boot.security.saml.web.common.utils.CommonResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -56,4 +57,9 @@ public class LandingController {
 		return "Hello wold";
 	}
 
+	@ResponseBody
+	@GetMapping("logout")
+	public CommonResponse logout(){
+		return CommonResponse.ok();
+	}
 }

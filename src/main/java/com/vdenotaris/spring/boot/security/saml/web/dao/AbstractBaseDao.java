@@ -3,6 +3,7 @@ package com.vdenotaris.spring.boot.security.saml.web.dao;
 
 
 import com.vdenotaris.spring.boot.security.saml.web.utils.Page;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,7 +18,7 @@ import java.util.List;
  * @Date 2022/4/18 14:07
  * @Created by ge.ji
  */
-
+@Slf4j
 public abstract class AbstractBaseDao<T> implements BaseDao<T> {
 
     @PersistenceContext
@@ -76,6 +77,7 @@ public abstract class AbstractBaseDao<T> implements BaseDao<T> {
             }
             return (T) query.getSingleResult();
         }catch (Exception e){
+            log.error("",e);
             return null;
         }
     }

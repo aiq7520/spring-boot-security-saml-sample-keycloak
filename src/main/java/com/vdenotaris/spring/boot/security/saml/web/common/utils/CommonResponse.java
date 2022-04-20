@@ -18,8 +18,8 @@ public class CommonResponse extends  HashMap<String,Object>{
 
     private CommonResponse(){}
     // 定义返回的字段名称  避免不同的前端需要修改
-    private final static String STATUS = "status";
-    private final static String MESSAGE = "msg";
+    private final static String STATUS = "code";
+    private final static String MESSAGE = "data";
     // 错误信息 便于开发人员定位错误信息
     private final static String ERROR= "ERROR";
 
@@ -51,7 +51,7 @@ public class CommonResponse extends  HashMap<String,Object>{
      * @param msg 异常提示
      */
     public static CommonResponse ok(String msg) {
-        return new CommonResponse().put(MESSAGE,msg).put(STATUS,200);
+        return new CommonResponse().put(MESSAGE,msg).put(STATUS,20000);
     }
 
 

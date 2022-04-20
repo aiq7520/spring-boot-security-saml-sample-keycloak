@@ -25,8 +25,8 @@ public class SysUserServiceImpl implements SysUserService{
     @Override
     @Transactional
     public void register(SysUser user) {
-        String hql ="select count(1) from SysUser u where u.userName = ?1";
-        int count = userDao.count(hql,user.getUserName());
+        String hql ="select count(1) from SysUser u where u.username = ?1";
+        int count = userDao.count(hql,user.getUsername());
         if(count>=1){
             throw new ResultException("this user has exist");
         }
@@ -35,7 +35,7 @@ public class SysUserServiceImpl implements SysUserService{
 
     @Override
     public SysUser findByUserName(String username) {
-        String hql ="from SysUser u where u.userName = ?1";
+        String hql ="from SysUser u where u.username = ?1";
         return userDao.load(hql,username);
     }
 
