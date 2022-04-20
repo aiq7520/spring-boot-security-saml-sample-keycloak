@@ -21,7 +21,7 @@ create table sys_user (
 drop table if exists class_room;
 create table class_room(
         id           bigint(20)      not null auto_increment    comment '用户ID',
-        room_status enum('staring','not_Start','finish') comment '状态：进行中｜未开始｜已结束',
+        room_status enum('staring','notStart','finish') comment '状态：进行中｜未开始｜已结束',
         name         varchar(30)     not null            comment '教室名称',
         primary key (id)
 ) engine=innodb auto_increment=1 comment = '教室信息表';

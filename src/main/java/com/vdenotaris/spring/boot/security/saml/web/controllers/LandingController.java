@@ -57,9 +57,9 @@ public class LandingController {
 		return "Hello wold";
 	}
 
-	@ResponseBody
-	@GetMapping("logout")
-	public CommonResponse logout(){
-		return CommonResponse.ok();
-	}
+//	@ResponseBody
+//	@GetMapping("logout")
+//	public CommonResponse logout(){
+//		return CommonResponse.ok();
+//	}
 }

@@ -25,7 +25,7 @@ import java.util.Timer;
 
 import com.vdenotaris.spring.boot.security.saml.web.common.exception.LoginFailureHandler;
 import com.vdenotaris.spring.boot.security.saml.web.core.MyAuthenticationSuccessHandler;
-import com.vdenotaris.spring.boot.security.saml.web.core.UsernamePasswordUserDetailServiceImpl;
+import com.vdenotaris.spring.boot.security.saml.web.core.UsernamePasswordLogoutSuccessHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.velocity.app.VelocityEngine;
@@ -44,7 +44,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -99,15 +98,14 @@ import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.*;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.vdenotaris.spring.boot.security.saml.web.core.SAMLUserDetailsServiceImpl;
- 
+
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
@@ -136,6 +134,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
     private SAMLUserDetailsServiceImpl samlUserDetailsServiceImpl;
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private UsernamePasswordLogoutSuccessHandler logoutHandler;
      
     // Initialization of the velocity engine
     @Bean
@@ -448,6 +449,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
         List<SecurityFilterChain> chains = new ArrayList<SecurityFilterChain>();
         chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/login"),
                 usernamePasswordAuthenticationFilter()));
+        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/logout"),
+                logoutFilter()));
         chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/login/**"),
                 samlEntryPoint()));
         chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/logout/**"),
@@ -463,6 +466,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
         chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/discovery/**"),
                 samlIDPDiscovery()));
         return new FilterChainProxy(chains);
+    }
+    @Bean
+    public LogoutFilter logoutFilter(){
+        return new LogoutFilter((LogoutSuccessHandler) logoutHandler,new LogoutHandler[] { logoutHandler() });
     }
 
     @Bean
@@ -514,19 +521,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
         		.addFilterBefore(metadataGeneratorFilter(), ChannelProcessingFilter.class)
         		.addFilterAfter(samlFilter(), BasicAuthenticationFilter.class)
         		.addFilterBefore(samlFilter(), CsrfFilter.class);
-        http        
-            .authorizeRequests()
-                // 不需要  认证的 url
-           		.antMatchers("/").permitAll()
-           		.antMatchers("/saml/**").permitAll()
-           		.antMatchers("/css/**").permitAll()
-           		.antMatchers("/img/**").permitAll()
-           		.antMatchers("/js/**").permitAll()
-//                .antMatchers("/hello").permitAll()
-           		.anyRequest().authenticated();
         http
-        		.logout().logoutUrl("/logout");
-//        			.disable();	// The logout procedure is already handled by SAML filters.
+                .csrf().disable()
+                .authorizeRequests()
+                    // 不需要  认证的 url
+                    .antMatchers("/").permitAll()
+                    .antMatchers("/saml/**").permitAll()
+                    .antMatchers("/css/**").permitAll()
+                    .antMatchers("/img/**").permitAll()
+                    .antMatchers("/js/**").permitAll()
+           		.anyRequest().authenticated();
     }
  
     /**

@@ -3,6 +3,8 @@ package com.vdenotaris.spring.boot.security.saml.web.service;
 
 import com.vdenotaris.spring.boot.security.saml.web.entity.SysUser;
 
+import java.util.List;
+
 /**
  * @Classname SysUserService
  * @Description TODO
@@ -31,6 +33,9 @@ public interface SysUserService {
      * @param id
      */
     void deleted(Long id);
+
+
+    List<SysUser> loadAll();
 
 
 }

@@ -6,6 +6,7 @@ import com.vdenotaris.spring.boot.security.saml.web.entity.SysUser;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * @Classname SysUserServiceImpl
@@ -14,7 +15,6 @@ import javax.transaction.Transactional;
  * @Created by ge.ji
  */
 @Service
-//@Transactional
 public class SysUserServiceImpl implements SysUserService{
     private final SysUserDao userDao;
 
@@ -40,8 +40,14 @@ public class SysUserServiceImpl implements SysUserService{
     }
 
     @Override
+    @Transactional
     public void deleted(Long id) {
         userDao.delete(id);
+    }
+
+    @Override
+    public List<SysUser> loadAll() {
+        return userDao.findAll();
     }
 
 

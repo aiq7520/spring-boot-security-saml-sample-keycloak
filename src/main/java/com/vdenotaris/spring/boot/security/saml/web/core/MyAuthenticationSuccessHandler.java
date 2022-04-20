@@ -2,20 +2,16 @@ package com.vdenotaris.spring.boot.security.saml.web.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vdenotaris.spring.boot.security.saml.web.common.utils.CommonResponse;
-import com.vdenotaris.spring.boot.security.saml.web.common.utils.JwtTokenUtil;
 import org.mariadb.jdbc.internal.logging.Logger;
 import org.mariadb.jdbc.internal.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Classname SavedRequestAwareAuthenticationSuccessHandler
@@ -36,11 +32,8 @@ public class MyAuthenticationSuccessHandler extends SavedRequestAwareAuthenticat
                                         Authentication authentication) throws  IOException {
         logger.info("MyAuthenticationSuccessHandler login success!");
         response.setContentType("application/json;charset=UTF-8");
-        Map<String, Object> claims = new HashMap<>();
-        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-        String jwtString = jwtTokenUtil.doGenerateToken(claims, authentication.getName());
         // 把authentication对象转成 json 格式 字符串 通过 response 以application/json;charset=UTF-8 格式写到响应里面去
-        response.getWriter().write(objectMapper.writeValueAsString(CommonResponse.ok(jwtString)));
+        response.getWriter().write(objectMapper.writeValueAsString(CommonResponse.ok(UUID.randomUUID().toString())));
 
     }
 }

@@ -19,7 +19,7 @@ public class CommonResponse extends  HashMap<String,Object>{
     private CommonResponse(){}
     // 定义返回的字段名称  避免不同的前端需要修改
     private final static String STATUS = "code";
-    private final static String MESSAGE = "data";
+    private final static String DATA = "data";
     // 错误信息 便于开发人员定位错误信息
     private final static String ERROR= "ERROR";
 
@@ -36,12 +36,12 @@ public class CommonResponse extends  HashMap<String,Object>{
      * @param msg 异常提示
      * @return 异常返回消息
      */
-    public static CommonResponse error(String msg,Exception error) {
+    public static CommonResponse error(Object msg,Exception error) {
         return error(HttpStatus.INTERNAL_SERVER_ERROR.value(), msg,error);
     }
-    public static CommonResponse error(int status, String msg,Exception error) {
+    public static CommonResponse error(int status, Object msg,Exception error) {
         CommonResponse commonResponse = new CommonResponse();
-        return commonResponse.put(STATUS, status).put(MESSAGE, msg).put(ERROR,error.toString());
+        return commonResponse.put(STATUS, status).put(DATA, msg).put(ERROR,error.toString());
     }
     public static CommonResponse error(int status, String msg) {
         return CommonResponse.error(status,msg,new ResultException(msg));
@@ -50,8 +50,8 @@ public class CommonResponse extends  HashMap<String,Object>{
      * 指定成功返回消息
      * @param msg 异常提示
      */
-    public static CommonResponse ok(String msg) {
-        return new CommonResponse().put(MESSAGE,msg).put(STATUS,20000);
+    public static CommonResponse ok(Object msg) {
+        return new CommonResponse().put(DATA,msg).put(STATUS,20000);
     }
 
 
@@ -66,15 +66,6 @@ public class CommonResponse extends  HashMap<String,Object>{
         return this;
     }
 
-    /**
-     * 启动新线程执行
-     * @param executor 线程
-     * @return 响应数据
-     */
-//    public static CommonResponse op(Runnable executor) {
-//        executor.run();
-//        return CommonResponse.ok();
-//    }
 
 
 }
