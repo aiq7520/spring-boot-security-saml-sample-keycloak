@@ -1,4 +1,4 @@
-package com.vdenotaris.spring.boot.security.saml.web.common.exception;
+package com.vdenotaris.spring.boot.security.saml.web.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vdenotaris.spring.boot.security.saml.web.common.utils.CommonResponse;
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * @Date 2022/4/19 13:25
  * @Created by ge.ji
  */
-//@Component
+@Component
 public class LoginFailureHandler implements AuthenticationFailureHandler {
 
     @Autowired

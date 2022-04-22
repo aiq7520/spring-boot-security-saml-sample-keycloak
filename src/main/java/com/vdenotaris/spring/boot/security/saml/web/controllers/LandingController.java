@@ -38,8 +38,9 @@ public class LandingController {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(LandingController.class);
 
-	@RequestMapping("/landing")
+	@RequestMapping("/landing")//{}
 	public String landing(@CurrentUser User user, Model model) {
+		// user {}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth == null)
 			LOG.debug("Current authentication instance from security context is null");

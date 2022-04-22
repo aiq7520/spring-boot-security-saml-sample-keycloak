@@ -13,6 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.UUID;
+
 
 /**
  * @Classname SysUserServiceTest
@@ -43,8 +45,11 @@ public class SysUserServiceTest {
 
     @Test
     public void register_user() {
-//        SysUser mockUser = mock(SysUser.class);
-//        userService.register(mockUser);
+        String username = UUID.randomUUID().toString().substring(0,10);
+        SysUser existUser = new SysUser(username,UUID.randomUUID().toString());
+        userService.register(existUser);
     }
+
+
 
 }

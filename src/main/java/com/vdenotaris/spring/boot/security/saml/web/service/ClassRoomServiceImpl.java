@@ -34,6 +34,7 @@ public class ClassRoomServiceImpl implements ClassRoomService{
     }
 
     @Override
+    @Transactional
     public ClassRoom update(ClassRoom room) {
         return classRoomDao.update(room);
     }

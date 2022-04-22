@@ -18,7 +18,7 @@
 
 # Use Maven to pack a standalone executable fat-JAR file.
 FROM maven:3.6.0-jdk-8-alpine AS build
-
+#FROM maven:3-jdk-11 AS build
 # Upgrade Alpine packages and install OpenSSL
 RUN apk update && \
     apk upgrade && \
@@ -44,8 +44,8 @@ RUN mvn -T 1C -f /usr/src/app/pom.xml clean package
 ############################################################################
 
 # Base Alpine Linux based image with OpenJDK JRE only
-FROM openjdk:8-jdk-alpine
-
+ FROM openjdk:8-jdk-alpine
+#FROM openjdk:11
 # Project maintainer
 MAINTAINER Vincenzo De Notaris (dev@vdenotaris.com)
 

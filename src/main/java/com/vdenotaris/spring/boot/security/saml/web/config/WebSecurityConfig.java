@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 
-import com.vdenotaris.spring.boot.security.saml.web.common.exception.LoginFailureHandler;
+import com.vdenotaris.spring.boot.security.saml.web.core.LoginFailureHandler;
+import com.vdenotaris.spring.boot.security.saml.web.core.CustomSavedRequestAwareAuthenticationSuccessHandler;
 import com.vdenotaris.spring.boot.security.saml.web.core.MyAuthenticationSuccessHandler;
 import com.vdenotaris.spring.boot.security.saml.web.core.UsernamePasswordLogoutSuccessHandler;
 import org.apache.commons.httpclient.HttpClient;
@@ -95,7 +96,6 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.*;
@@ -116,6 +116,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
 
     @Value("${keycloak.clent.id}")
     private String clienId;
+    @Value("${saml.success.redirect.handler}")
+    private String samlSuccessRedirectHandler;
 
 
 
@@ -137,6 +139,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
 
     @Autowired
     private UsernamePasswordLogoutSuccessHandler logoutHandler;
+
+    @Autowired
+    private LoginFailureHandler loginFailureHandler;
      
     // Initialization of the velocity engine
     @Bean
@@ -149,12 +154,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
     public StaticBasicParserPool parserPool() {
         return new StaticBasicParserPool();
     }
- 
+
     @Bean(name = "parserPoolHolder")
     public ParserPoolHolder parserPoolHolder() {
         return new ParserPoolHolder();
     }
- 
+
     // Bindings, encoders and decoders used for creating and parsing messages
     @Bean
     public HttpClient httpClient() {
@@ -178,13 +183,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
     public SAMLContextProviderImpl contextProvider() {
         return new SAMLContextProviderImpl();
     }
- 
+
     // Initialization of OpenSAML library
     @Bean
     public static SAMLBootstrap sAMLBootstrap() {
         return new SAMLBootstrap();
     }
- 
+
     // Logger for SAML messages and events
     @Bean
     public SAMLDefaultLogger samlLogger() {
@@ -311,29 +316,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
      
     // Handler deciding where to redirect user after successful login
     @Bean
-    public SavedRequestAwareAuthenticationSuccessHandler successRedirectHandler() {
-        SavedRequestAwareAuthenticationSuccessHandler successRedirectHandler =
-                new SavedRequestAwareAuthenticationSuccessHandler();
-        successRedirectHandler.setDefaultTargetUrl("/landing");
+    public CustomSavedRequestAwareAuthenticationSuccessHandler successRedirectHandler() {
+//        SavedRequestAwareAuthenticationSuccessHandler successRedirectHandler =
+//                new SavedRequestAwareAuthenticationSuccessHandler();
+        CustomSavedRequestAwareAuthenticationSuccessHandler successRedirectHandler =
+                new CustomSavedRequestAwareAuthenticationSuccessHandler();
+        successRedirectHandler.setDefaultTargetUrl(samlSuccessRedirectHandler);
         return successRedirectHandler;
     }
+
     
 	// Handler deciding where to redirect user after failed login
-    @Bean
-    public SimpleUrlAuthenticationFailureHandler authenticationFailureHandler() {
-	    	SimpleUrlAuthenticationFailureHandler failureHandler =
-	    			new SimpleUrlAuthenticationFailureHandler();
-	    	failureHandler.setUseForward(true);
-	    	failureHandler.setDefaultFailureUrl("/error");
-	    	return failureHandler;
-    }
+
      
     @Bean
     public SAMLWebSSOHoKProcessingFilter samlWebSSOHoKProcessingFilter() throws Exception {
         SAMLWebSSOHoKProcessingFilter samlWebSSOHoKProcessingFilter = new SAMLWebSSOHoKProcessingFilter();
         samlWebSSOHoKProcessingFilter.setAuthenticationSuccessHandler(successRedirectHandler());
         samlWebSSOHoKProcessingFilter.setAuthenticationManager(authenticationManager());
-        samlWebSSOHoKProcessingFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
+        samlWebSSOHoKProcessingFilter.setAuthenticationFailureHandler(loginFailureHandler);
         return samlWebSSOHoKProcessingFilter;
     }
     
@@ -343,7 +344,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
         SAMLProcessingFilter samlWebSSOProcessingFilter = new SAMLProcessingFilter();
         samlWebSSOProcessingFilter.setAuthenticationManager(authenticationManager());
         samlWebSSOProcessingFilter.setAuthenticationSuccessHandler(successRedirectHandler());
-        samlWebSSOProcessingFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
+        samlWebSSOProcessingFilter.setAuthenticationFailureHandler(loginFailureHandler);
         return samlWebSSOProcessingFilter;
     }
      
@@ -405,27 +406,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
     public HTTPSOAP11Binding soapBinding() {
         return new HTTPSOAP11Binding(parserPool());
     }
-    
+
     @Bean
     public HTTPPostBinding httpPostBinding() {
     		return new HTTPPostBinding(parserPool(), velocityEngine());
     }
-    
+
     @Bean
     public HTTPRedirectDeflateBinding httpRedirectDeflateBinding() {
     		return new HTTPRedirectDeflateBinding(parserPool());
     }
-    
+
     @Bean
     public HTTPSOAP11Binding httpSOAP11Binding() {
     	return new HTTPSOAP11Binding(parserPool());
     }
-    
+
     @Bean
     public HTTPPAOS11Binding httpPAOS11Binding() {
     		return new HTTPPAOS11Binding(parserPool());
     }
-    
+
     // Processor
 	@Bean
 	public SAMLProcessorImpl processor() {
@@ -437,7 +438,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
 		bindings.add(httpPAOS11Binding());
 		return new SAMLProcessorImpl(bindings);
 	}
-    
+
 	/**
 	 * Define the security filter chain in order to support SSO Auth by using SAML 2.0
 	 * 
@@ -477,7 +478,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
         UsernamePasswordAuthenticationFilter authenticationFilter = new UsernamePasswordAuthenticationFilter();
         authenticationFilter.setAuthenticationManager(authenticationManager());
         authenticationFilter.setAuthenticationSuccessHandler(myAuthenticationSuccessHandler());
-        authenticationFilter.setAuthenticationFailureHandler(loginFailureHandler());
+        authenticationFilter.setAuthenticationFailureHandler(loginFailureHandler);
         return authenticationFilter;
     }
     @Bean
@@ -500,10 +501,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
         //return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Bean
-    public LoginFailureHandler loginFailureHandler(){
-        return new LoginFailureHandler();
-    }
+
      
 
     /**
@@ -514,9 +512,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
     */
     @Override  
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//            .httpBasic()
-//                .authenticationEntryPoint(samlEntryPoint());
         http
         		.addFilterBefore(metadataGeneratorFilter(), ChannelProcessingFilter.class)
         		.addFilterAfter(samlFilter(), BasicAuthenticationFilter.class)

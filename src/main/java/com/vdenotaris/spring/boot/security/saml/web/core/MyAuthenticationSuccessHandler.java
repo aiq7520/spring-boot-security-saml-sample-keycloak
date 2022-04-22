@@ -33,7 +33,9 @@ public class MyAuthenticationSuccessHandler extends SavedRequestAwareAuthenticat
         logger.info("MyAuthenticationSuccessHandler login success!");
         response.setContentType("application/json;charset=UTF-8");
         // 把authentication对象转成 json 格式 字符串 通过 response 以application/json;charset=UTF-8 格式写到响应里面去
-        response.getWriter().write(objectMapper.writeValueAsString(CommonResponse.ok(UUID.randomUUID().toString())));
+
+
+        response.getWriter().write(objectMapper.writeValueAsString(CommonResponse.ok(authentication.getDetails())));
 
     }
 }
