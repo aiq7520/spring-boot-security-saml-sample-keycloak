@@ -25,24 +25,22 @@ public class SysUserServiceImpl implements SysUserService{
     @Override
     @Transactional
     public void register(SysUser user) {
-        String hql ="select count(1) from SysUser u where u.username = ?1";
-        int count = userDao.count(hql,user.getUsername());
+        int count = userDao.countByUsername(user.getUsername());
         if(count>=1){
             throw new ResultException("this user has exist");
         }
-        userDao.add(user);
+        userDao.save(user);
     }
 
     @Override
     public SysUser findByUserName(String username) {
-        String hql ="from SysUser u where u.username = ?1";
-        return userDao.load(hql,username);
+        return userDao.querySysUserByUsername(username);
     }
 
     @Override
     @Transactional
     public void deleted(Long id) {
-        userDao.delete(id);
+        userDao.deleteById(id);
     }
 
     @Override

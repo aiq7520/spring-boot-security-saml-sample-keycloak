@@ -24,19 +24,19 @@ public class ClassRoomServiceImpl implements ClassRoomService{
     @Override
     @Transactional
     public ClassRoom add(ClassRoom room) {
-        return classRoomDao.add(room);
+        return classRoomDao.save(room);
     }
 
     @Override
     @Transactional
     public void remove(Long id) {
-        classRoomDao.delete(id);
+        classRoomDao.deleteById(id);
     }
 
     @Override
     @Transactional
     public ClassRoom update(ClassRoom room) {
-        return classRoomDao.update(room);
+        return classRoomDao.save(room);
     }
 
     @Override

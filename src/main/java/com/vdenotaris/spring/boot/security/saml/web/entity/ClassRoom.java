@@ -26,4 +26,9 @@ public class ClassRoom {
 
     private String name;
 
+
+    public ClassRoom(String roomStatus, String name) {
+        this.roomStatus = roomStatus;
+        this.name = name;
+    }
 }

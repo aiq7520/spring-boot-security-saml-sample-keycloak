@@ -1,6 +1,9 @@
 package com.vdenotaris.spring.boot.security.saml.web.dao;
 
 import com.vdenotaris.spring.boot.security.saml.web.entity.ClassRoom;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,5 +13,8 @@ import org.springframework.stereotype.Repository;
  * @Created by ge.ji
  */
 @Repository
-public interface ClassRoomDao extends BaseDao<ClassRoom>{
+public interface ClassRoomDao extends JpaRepository<ClassRoom,Long> {
+
+    Integer deleteByName(String name);
+    ClassRoom findByName(String name);
 }

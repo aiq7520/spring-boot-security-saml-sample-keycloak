@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -50,6 +51,30 @@ public class SysUserServiceTest {
         userService.register(existUser);
     }
 
+    @Test
+    public void test_find_by_username() {
+        String has = "MrGe";
+        String not = UUID.randomUUID().toString();
 
+        SysUser hasUser = userService.findByUserName(has);
 
+        SysUser noUser = userService.findByUserName(not);
+
+        Assert.assertNull(noUser);
+        Assert.assertNotNull(hasUser);
+
+    }
+    @Test
+    public void test_deleted() {
+        SysUser user = new SysUser("testDeleted","123456");
+        userService.register(user);
+        Assert.assertNotNull(user.getId());
+        userService.deleted(user.getId());
+    }
+
+    @Test
+    public void test_load_all() {
+        List<SysUser> sysUsers = userService.loadAll();
+        Assert.assertTrue(sysUsers.size()>0);
+    }
 }

@@ -14,5 +14,5 @@ public interface ClassRoomService {
     ClassRoom add(ClassRoom room);
     void remove(Long id);
     ClassRoom update(ClassRoom classRoom);
-    List<ClassRoom> findAll();
+    List<ClassRoom>  findAll();
 }
