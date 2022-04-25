@@ -1,5 +1,6 @@
 package com.vdenotaris.spring.boot.security.saml.web.service;
 
+import com.vdenotaris.spring.boot.security.saml.web.Application;
 import com.vdenotaris.spring.boot.security.saml.web.TestConfig;
 import com.vdenotaris.spring.boot.security.saml.web.common.exception.ResultException;
 import com.vdenotaris.spring.boot.security.saml.web.entity.SysUser;
@@ -18,13 +19,13 @@ import java.util.UUID;
 
 
 /**
- * @Classname SysUserServiceTest
+ * @ClassName SysUserServiceTest
  * @Description TODO
  * @Date 2022/4/18 14:20
  * @Created by ge.ji
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestConfig.class})
+@ContextConfiguration(classes = {Application.class})
 @TestPropertySource(locations = {"classpath:application.properties"})
 public class SysUserServiceTest {
 

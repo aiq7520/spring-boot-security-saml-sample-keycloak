@@ -16,13 +16,12 @@
 
 package com.vdenotaris.spring.boot.security.saml.web.core;
 
+import com.vdenotaris.spring.boot.security.saml.web.Application;
 import com.vdenotaris.spring.boot.security.saml.web.CommonTestSupport;
-import com.vdenotaris.spring.boot.security.saml.web.TestConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opensaml.saml2.core.NameID;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -41,7 +40,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestConfig.class})
+@ContextConfiguration(classes = {Application.class})
 @TestPropertySource(locations = {"classpath:application.properties"})
 public class SAMLUserDetailsServiceImplTest extends CommonTestSupport {
 

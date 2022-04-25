@@ -1,27 +1,29 @@
-
-
+CREATE DATABASE IF NOT EXISTS lanSchool;
+CREATE DATABASE IF NOT EXISTS keycloak;
 use lanSchool;
 -- ----------------------------
--- 用户信息表
+-- user info table
 -- ----------------------------
 drop table if exists sys_user;
 create table sys_user (
-                          id           bigint(20)      not null auto_increment    comment '用户ID',
-                          user_name         varchar(30)     not null                   comment '用户账号',
-                          email             varchar(50)     default ''                 comment '用户邮箱',
-                          sex               char(1)         default '0'                comment '用户性别（0男 1女 2未知）',
-                          password          varchar(100)    default ''                 comment '密码',
+                          id           bigint(20)      not null auto_increment    comment 'id',
+                          username         varchar(30)     not null                   comment 'username',
+                          password          varchar(100)    default ''                 comment 'password',
                           primary key (id)
-) engine=innodb auto_increment=1 comment = '用户信息表';
+) engine=innodb auto_increment=1 comment = 'user info';
 
+insert into sys_user(username,password) value ('admin','123456');
 
 -- ----------------------------
--- 用户信息表
+--
 -- ----------------------------
 drop table if exists class_room;
 create table class_room(
-        id           bigint(20)      not null auto_increment    comment '用户ID',
-        room_status enum('staring','notStart','finish') comment '状态：进行中｜未开始｜已结束',
-        name         varchar(30)     not null            comment '教室名称',
+        id           bigint(20)      not null auto_increment    comment 'id',
+        room_status enum('staring','notStart','finish') comment 'status：staring｜noStart｜finish',
+        name         varchar(30)     not null            comment 'name',
         primary key (id)
-) engine=innodb auto_increment=1 comment = '教室信息表';
+) engine=innodb auto_increment=1 comment = 'class room'
+
+
+

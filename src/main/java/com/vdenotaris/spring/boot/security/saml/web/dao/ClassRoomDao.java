@@ -7,7 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * @Classname ClassRoomDao
+ * @ClassName ClassRoomDao
  * @Description TODO
  * @Date 2022/4/20 09:08
  * @Created by ge.ji

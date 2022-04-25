@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 /**
- * @Classname ClassRoom
+ * @ClassName ClassRoom
  * @Description TODO
  * @Date 2022/4/18 13:47
  * @Created by ge.ji

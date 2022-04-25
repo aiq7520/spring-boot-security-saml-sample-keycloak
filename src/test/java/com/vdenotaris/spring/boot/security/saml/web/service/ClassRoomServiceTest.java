@@ -1,8 +1,8 @@
 package com.vdenotaris.spring.boot.security.saml.web.service;
 
 
+import com.vdenotaris.spring.boot.security.saml.web.Application;
 import com.vdenotaris.spring.boot.security.saml.web.TestConfig;
-import com.vdenotaris.spring.boot.security.saml.web.dao.ClassRoomDao;
 import com.vdenotaris.spring.boot.security.saml.web.entity.ClassRoom;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,16 +13,15 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
- * @Classname ClassRoomServiceTest
+ * @ClassName ClassRoomServiceTest
  * @Description TODO
  * @Date 2022/4/22 14:02
  * @Created by ge.ji
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestConfig.class})
+@ContextConfiguration(classes = {Application.class})
 @TestPropertySource(locations = {"classpath:application.properties"})
 public class ClassRoomServiceTest {
 

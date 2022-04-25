@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 /**
- * @Classname SysUser
+ * @ClassName SysUser
  * @Description
  * @Date 2022/4/18 13:43
  * @Created by ge.ji

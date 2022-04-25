@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Classname UsernamePasswordUserDetailServiceImpl
+ * @ClassName UsernamePasswordUserDetailServiceImpl
  * @Description TODO
  * @Date 2022/4/19 10:51
  * @Created by ge.ji

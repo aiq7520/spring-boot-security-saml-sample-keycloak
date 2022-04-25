@@ -4,7 +4,7 @@ import com.vdenotaris.spring.boot.security.saml.web.entity.SysUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * @Classname SysUserDao
+ * @ClassName SysUserDao
  * @Description TODO
  * @Date 2022/4/18 14:16
  * @Created by ge.ji

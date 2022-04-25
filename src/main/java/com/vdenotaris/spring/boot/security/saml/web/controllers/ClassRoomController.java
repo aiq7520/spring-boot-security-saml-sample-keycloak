@@ -6,7 +6,7 @@ import com.vdenotaris.spring.boot.security.saml.web.service.ClassRoomService;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @Classname ClassRoomController
+ * @ClassName ClassRoomController
  * @Description TODO
  * @Date 2022/4/20 09:19
  * @Created by ge.ji

@@ -16,8 +16,8 @@
 
 package com.vdenotaris.spring.boot.security.saml.web.core;
 
+import com.vdenotaris.spring.boot.security.saml.web.Application;
 import com.vdenotaris.spring.boot.security.saml.web.CommonTestSupport;
-import com.vdenotaris.spring.boot.security.saml.web.TestConfig;
 import com.vdenotaris.spring.boot.security.saml.web.stereotypes.CurrentUser;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,7 +44,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes= TestConfig.class)
+@ContextConfiguration(classes= Application.class)
 @TestPropertySource(locations = {"classpath:application.properties"})
 public class CurrentUserHandlerMethodArgumentResolverTest extends CommonTestSupport {
 

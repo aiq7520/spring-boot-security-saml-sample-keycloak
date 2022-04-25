@@ -34,9 +34,9 @@ import static org.mockito.Mockito.when;
 
 public class CommonTestSupport {
 
-    public static final String USER_NAME = "UserName";
+    public static final String USER_NAME = "admin";
 
-    public static final String USER_PASSWORD = "<abc123>";
+    public static final String USER_PASSWORD = "123456";
 
     public static final String USER_ROLE = "ROLE_USER";
 

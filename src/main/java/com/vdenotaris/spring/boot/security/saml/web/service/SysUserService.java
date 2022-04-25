@@ -6,7 +6,7 @@ import com.vdenotaris.spring.boot.security.saml.web.entity.SysUser;
 import java.util.List;
 
 /**
- * @Classname SysUserService
+ * @ClassName SysUserService
  * @Description TODO
  * @Date 2022/4/18 13:55
  * @Created by ge.ji

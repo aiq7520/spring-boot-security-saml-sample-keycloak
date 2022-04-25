@@ -1,40 +1,97 @@
 package com.vdenotaris.spring.boot.security.saml.web.controllers;
 
-import org.junit.After;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vdenotaris.spring.boot.security.saml.web.Application;
+import com.vdenotaris.spring.boot.security.saml.web.CommonTestSupport;
+import com.vdenotaris.spring.boot.security.saml.web.entity.ClassRoom;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import javax.transaction.Transactional;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * @Classname ClassRoomControllerTest
+ * @ClassName ClassRoomControllerTest
  * @Description TODO
  * @Date 2022/4/22 15:10
  * @Created by ge.ji
  */
-public class ClassRoomControllerTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = Application.class)
+@WebAppConfiguration
+public class ClassRoomControllerTest extends CommonTestSupport {
+
+    private Long classRoomId = 18L;
+
+    private ObjectMapper objectMapper =new ObjectMapper();
+
+    @Autowired
+    private WebApplicationContext wac;
+
+    private MockMvc mockMvc;
+
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
-    @After
-    public void tearDown() throws Exception {
+
+
+    @Test
+    @Transactional
+    @Rollback
+    public void add() throws Exception {
+        ClassRoom classRoom = new ClassRoom("notStart","controller_test_add");
+        mockMvc.perform(post("/classRoom/add")
+               .contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(classRoom))
+               .session(mockHttpSession(true)))
+               .andExpect(status().isOk());
+//                .andReturn().getResponse().getContentAsString();
     }
 
     @Test
-    public void add() {
+    @Transactional
+    @Rollback
+    public void remove() throws Exception {
+        mockMvc.perform(delete("/classRoom/remove/"+classRoomId)
+               .session(mockHttpSession(true)))
+               .andExpect(status().isOk());
+
     }
 
     @Test
-    public void remove() {
+    public void findAll() throws Exception{
+        mockMvc.perform(get("/classRoom/findAll")
+                .session(mockHttpSession(true)))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void findAll() {
+    @Transactional
+    @Rollback
+    public void update() throws Exception{
+        ClassRoom classRoom = new ClassRoom("finish","controller_test_add");
+        classRoom.setId(classRoomId);
+        mockMvc.perform(put("/classRoom/update")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(classRoom))
+                .session(mockHttpSession(true)))
+                .andExpect(status().isOk());
     }
 
-    @Test
-    public void update() {
-    }
 }

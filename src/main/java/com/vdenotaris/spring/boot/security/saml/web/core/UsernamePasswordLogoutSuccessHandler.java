@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @Classname LogoutHandler
+ * @ClassName LogoutHandler
  * @Description TODO
  * @Date 2022/4/20 12:46
  * @Created by ge.ji

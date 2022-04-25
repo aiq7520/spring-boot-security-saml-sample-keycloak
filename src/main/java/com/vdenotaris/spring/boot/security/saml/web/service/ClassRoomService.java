@@ -5,7 +5,7 @@ import com.vdenotaris.spring.boot.security.saml.web.entity.ClassRoom;
 import java.util.List;
 
 /**
- * @Classname ClassRoomService
+ * @ClassName ClassRoomService
  * @Description TODO
  * @Date 2022/4/20 09:10
  * @Created by ge.ji

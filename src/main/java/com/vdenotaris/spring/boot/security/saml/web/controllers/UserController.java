@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 /**
- * @Classname UserController
+ * @ClassName UserController
  * @Description TODO
  * @Date 2022/4/19 09:11
  * @Created by ge.ji
@@ -18,8 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
     private SysUserService userService;
+
+    public UserController(SysUserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping("info")
     public CommonResponse info(@CurrentUser  User user){
         return CommonResponse.ok(user.getUsername());

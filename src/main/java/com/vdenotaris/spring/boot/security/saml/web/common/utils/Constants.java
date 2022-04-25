@@ -1,7 +1,7 @@
 package com.vdenotaris.spring.boot.security.saml.web.common.utils;
 
 /**
- * @Classname Constants
+ * @ClassName Constants
  * @Description TODO
  * @Date 2022/4/19 18:47
  * @Created by ge.ji

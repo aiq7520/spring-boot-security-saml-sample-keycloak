@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * @Classname ClassRoomServiceImpl
+ * @ClassName ClassRoomServiceImpl
  * @Description TODO
  * @Date 2022/4/20 09:11
  * @Created by ge.ji

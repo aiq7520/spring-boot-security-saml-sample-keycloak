@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * @Classname SysUserServiceImpl
+ * @ClassName SysUserServiceImpl
  * @Description TODO
  * @Date 2022/4/18 13:54
  * @Created by ge.ji

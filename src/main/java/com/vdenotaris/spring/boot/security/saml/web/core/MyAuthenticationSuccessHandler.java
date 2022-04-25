@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 /**
- * @Classname SavedRequestAwareAuthenticationSuccessHandler
+ * @ClassName SavedRequestAwareAuthenticationSuccessHandler
  * @Description TODO
  * @Date 2022/4/19 14:05
  * @Created by ge.ji

@@ -3,7 +3,7 @@ package com.vdenotaris.spring.boot.security.saml.web.utils;
 
 import java.util.List;
 /**
- * @Classname Page
+ * @ClassName Page
  * @Description TODO
  * @Date 2022/4/18 14:10
  * @Created by ge.ji

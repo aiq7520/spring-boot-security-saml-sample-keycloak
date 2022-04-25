@@ -80,6 +80,7 @@ import org.springframework.security.saml.processor.HTTPSOAP11Binding;
 import org.springframework.security.saml.processor.SAMLBinding;
 import org.springframework.security.saml.processor.SAMLProcessorImpl;
 import org.springframework.security.saml.trust.httpclient.TLSProtocolConfigurer;
+import org.springframework.security.saml.userdetails.SAMLUserDetailsService;
 import org.springframework.security.saml.util.VelocityFactory;
 import org.springframework.security.saml.websso.ArtifactResolutionProfile;
 import org.springframework.security.saml.websso.ArtifactResolutionProfileImpl;
@@ -133,7 +134,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
 	}
 	
     @Autowired
-    private SAMLUserDetailsServiceImpl samlUserDetailsServiceImpl;
+    private SAMLUserDetailsService samlUserDetailsServiceImpl;
     @Autowired
     private UserDetailsService userDetailsService;
 
