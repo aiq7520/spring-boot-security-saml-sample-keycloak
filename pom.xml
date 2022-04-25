@@ -118,17 +118,6 @@
 			<artifactId>spring-security-saml2-core</artifactId>
 			<version>1.0.3.RELEASE</version>
 		</dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.junit.jupiter</groupId>-->
-<!--            <artifactId>junit-jupiter</artifactId>-->
-<!--			<version>artifactId</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-			<version>0.9.1</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -154,7 +143,7 @@
 				<configuration>
 					<forkMode>always</forkMode>
 					<includes>
-						<include>**/*Tests.java</include>
+						<include>**/*Test.java</include>
 					</includes>
 				</configuration>
 			</plugin>

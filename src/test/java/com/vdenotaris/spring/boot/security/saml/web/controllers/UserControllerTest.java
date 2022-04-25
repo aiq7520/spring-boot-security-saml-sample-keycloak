@@ -3,13 +3,17 @@ package com.vdenotaris.spring.boot.security.saml.web.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vdenotaris.spring.boot.security.saml.web.Application;
 import com.vdenotaris.spring.boot.security.saml.web.CommonTestSupport;
+import com.vdenotaris.spring.boot.security.saml.web.common.utils.CommonResponse;
 import com.vdenotaris.spring.boot.security.saml.web.entity.SysUser;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -40,7 +44,10 @@ public class UserControllerTest extends CommonTestSupport {
     @Autowired
     private WebApplicationContext wac;
 
+
     private MockMvc mockMvc;
+
+
     @Before
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
@@ -49,9 +56,15 @@ public class UserControllerTest extends CommonTestSupport {
 
     @Test
     public void info() throws Exception{
-        mockMvc.perform(get("/user/info")
-                        .session(mockHttpSession(true)))
-                .andExpect(status().isOk());
+        MockHttpServletResponse response = mockMvc.perform(
+                get("/user/info")
+                .principal(mockPrincipal()))
+                .andExpect(status().isOk()).andReturn()
+                .getResponse();
+
+        CommonResponse commonResponse = objectMapper.readValue(response.getContentAsString(),CommonResponse.class);
+        Assert.assertEquals(commonResponse.get(CommonResponse.DATA),CommonTestSupport.USER_NAME);
+        Assert.assertEquals(20000,commonResponse.get(CommonResponse.STATUS));
     }
 
     @Test

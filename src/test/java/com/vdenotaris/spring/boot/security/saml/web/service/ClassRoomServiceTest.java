@@ -2,16 +2,17 @@ package com.vdenotaris.spring.boot.security.saml.web.service;
 
 
 import com.vdenotaris.spring.boot.security.saml.web.Application;
-import com.vdenotaris.spring.boot.security.saml.web.TestConfig;
 import com.vdenotaris.spring.boot.security.saml.web.entity.ClassRoom;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -30,6 +31,8 @@ public class ClassRoomServiceTest {
 
 
     @Test
+    @Transactional
+    @Rollback
     public void test_add() {
         ClassRoom classRoom = new ClassRoom("finish","class_room_test");
         ClassRoom newClassroom = classRoomService.add(classRoom);
@@ -39,6 +42,8 @@ public class ClassRoomServiceTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void test_remove() {
         ClassRoom classRoom = new ClassRoom("finish", "test_remove");
         classRoom = classRoomService.add(classRoom);
@@ -47,12 +52,15 @@ public class ClassRoomServiceTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void test_update() {
         ClassRoom classRoom = new ClassRoom("finish", "class_room_test_update");
         classRoom = classRoomService.add(classRoom);
         classRoom.setRoomStatus("notStart");
         classRoom.setName("class_room_test_update");
         classRoom = classRoomService.update(classRoom);
+        // validate update classRoomName
         Assert.assertEquals("class_room_test_update",classRoom.getName());
         classRoomService.remove(classRoom.getId());
     }

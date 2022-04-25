@@ -18,8 +18,8 @@ public class CommonResponse extends  HashMap<String,Object>{
 
     private CommonResponse(){}
     // 定义返回的字段名称  避免不同的前端需要修改
-    private final static String STATUS = "code";
-    private final static String DATA = "data";
+    public final static String STATUS = "code";
+    public final static String DATA = "data";
     // 错误信息 便于开发人员定位错误信息
     private final static String ERROR= "ERROR";
 

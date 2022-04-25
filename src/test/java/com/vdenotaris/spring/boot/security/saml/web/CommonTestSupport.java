@@ -16,8 +16,14 @@
 
 package com.vdenotaris.spring.boot.security.saml.web;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vdenotaris.spring.boot.security.saml.web.common.utils.CommonResponse;
+import org.junit.Assert;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -26,6 +32,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.providers.ExpiringUsernameAuthenticationToken;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,6 +40,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class CommonTestSupport {
+
+    public ObjectMapper objectMapper =new ObjectMapper();
 
     public static final String USER_NAME = "admin";
 
@@ -69,6 +78,19 @@ public class CommonTestSupport {
         return mockSession;
     }
 
+    public Authentication mockPrincipal(){
+        SecurityContext mockSecurityContext = mock(SecurityContext.class);
+        ExpiringUsernameAuthenticationToken principal =
+                new ExpiringUsernameAuthenticationToken(null, USER_DETAILS, USER_NAME, AUTHORITIES);
+        principal.setDetails(USER_DETAILS);
+        when(mockSecurityContext.getAuthentication()).thenReturn(principal);
+        SecurityContextHolder.setContext(mockSecurityContext);
+        return principal;
+    }
+
+    public CommonResponse parseCommonResponse(MockHttpServletResponse response) throws IOException {
+        return objectMapper.readValue(response.getContentAsString(),CommonResponse.class);
+    }
     public MockHttpSession mockAnonymousHttpSession() {
         MockHttpSession mockSession = new MockHttpSession();
 

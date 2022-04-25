@@ -23,11 +23,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.vdenotaris.spring.boot.security.saml.web.stereotypes.CurrentUser;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class LandingController {
@@ -50,15 +48,4 @@ public class LandingController {
 	}
 
 
-	@ResponseBody
-	@GetMapping("hello")
-	public String hello(){
-		return "Hello wold";
-	}
-
-//	@ResponseBody
-//	@GetMapping("logout")
-//	public CommonResponse logout(){
-//		return CommonResponse.ok();
-//	}
 }

@@ -33,6 +33,7 @@ public class ClassRoomController {
     }
 
 
+
     @GetMapping("findAll")
     public CommonResponse findAll(){
         return CommonResponse.ok(classRoomService.findAll());
@@ -42,6 +43,8 @@ public class ClassRoomController {
     public CommonResponse update(@RequestBody ClassRoom classRoom){
         return CommonResponse.ok(classRoomService.update(classRoom));
     }
+
+
 
 
 }

@@ -1,7 +1,6 @@
 package com.vdenotaris.spring.boot.security.saml.web.service;
 
 import com.vdenotaris.spring.boot.security.saml.web.Application;
-import com.vdenotaris.spring.boot.security.saml.web.TestConfig;
 import com.vdenotaris.spring.boot.security.saml.web.common.exception.ResultException;
 import com.vdenotaris.spring.boot.security.saml.web.entity.SysUser;
 import org.junit.Assert;
@@ -10,10 +9,12 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,15 +38,19 @@ public class SysUserServiceTest {
 
 
     @Test
+    @Transactional
+    @Rollback
     public void register_exist_user() {
         exception.expect(ResultException.class);
         exception.expectMessage("this user has exist");
-        SysUser existUser = new SysUser("MrGe","123456");
+        SysUser existUser = new SysUser("admin","123456");
         userService.register(existUser);
 
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void register_user() {
         String username = UUID.randomUUID().toString().substring(0,10);
         SysUser existUser = new SysUser(username,UUID.randomUUID().toString());
@@ -54,18 +59,17 @@ public class SysUserServiceTest {
 
     @Test
     public void test_find_by_username() {
-        String has = "MrGe";
+        String has = "admin";
         String not = UUID.randomUUID().toString();
-
         SysUser hasUser = userService.findByUserName(has);
-
         SysUser noUser = userService.findByUserName(not);
-
         Assert.assertNull(noUser);
         Assert.assertNotNull(hasUser);
 
     }
     @Test
+    @Transactional
+    @Rollback
     public void test_deleted() {
         SysUser user = new SysUser("testDeleted","123456");
         userService.register(user);
