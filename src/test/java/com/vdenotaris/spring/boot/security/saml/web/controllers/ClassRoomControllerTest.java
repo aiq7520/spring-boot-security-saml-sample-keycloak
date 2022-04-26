@@ -112,7 +112,7 @@ public class ClassRoomControllerTest extends CommonTestSupport {
         classRoom.setId(5L);
         mockMvc.perform(put("/classRoom/update")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(classRoom))
+                        .content(objectMapper.writeValueAsString(classNoRoom))
                         .session(mockHttpSession(true)))
                 .andExpect(status().isOk());
 
