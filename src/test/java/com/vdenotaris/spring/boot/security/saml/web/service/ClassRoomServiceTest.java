@@ -59,7 +59,8 @@ public class ClassRoomServiceTest {
         classRoom = classRoomService.add(classRoom);
         classRoom.setRoomStatus("notStart");
         classRoom.setName("class_room_test_update");
-        classRoom = classRoomService.update(classRoom);
+        classRoomService.update(classRoom);
+
         // validate update classRoomName
         Assert.assertEquals("class_room_test_update",classRoom.getName());
         classRoomService.remove(classRoom.getId());

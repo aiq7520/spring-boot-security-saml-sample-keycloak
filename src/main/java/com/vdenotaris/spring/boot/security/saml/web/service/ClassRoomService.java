@@ -13,6 +13,6 @@ import java.util.List;
 public interface ClassRoomService {
     ClassRoom add(ClassRoom room);
     void remove(Long id);
-    ClassRoom update(ClassRoom classRoom);
+    Integer update(ClassRoom classRoom);
     List<ClassRoom>  findAll();
 }

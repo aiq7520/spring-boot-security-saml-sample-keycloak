@@ -17,12 +17,10 @@
 package com.vdenotaris.spring.boot.security.saml.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vdenotaris.spring.boot.security.saml.web.common.utils.CommonResponse;
-import org.junit.Assert;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -88,9 +86,10 @@ public class CommonTestSupport {
         return principal;
     }
 
-    public CommonResponse parseCommonResponse(MockHttpServletResponse response) throws IOException {
-        return objectMapper.readValue(response.getContentAsString(),CommonResponse.class);
+    public ResponseEntity parseCommonResponse(MockHttpServletResponse response) throws IOException {
+        return objectMapper.readValue(response.getContentAsString(),ResponseEntity.class);
     }
+
     public MockHttpSession mockAnonymousHttpSession() {
         MockHttpSession mockSession = new MockHttpSession();
 

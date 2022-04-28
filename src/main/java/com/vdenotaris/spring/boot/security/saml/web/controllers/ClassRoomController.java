@@ -1,9 +1,12 @@
 package com.vdenotaris.spring.boot.security.saml.web.controllers;
 
-import com.vdenotaris.spring.boot.security.saml.web.common.utils.CommonResponse;
 import com.vdenotaris.spring.boot.security.saml.web.entity.ClassRoom;
 import com.vdenotaris.spring.boot.security.saml.web.service.ClassRoomService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @ClassName ClassRoomController
@@ -21,27 +24,27 @@ public class ClassRoomController {
     }
 
     @PostMapping("add")
-    public CommonResponse add(@RequestBody ClassRoom classRoom){
+    public ResponseEntity<ClassRoom> add(@RequestBody ClassRoom classRoom){
         classRoom.setRoomStatus("notStart");
-        return CommonResponse.ok(classRoomService.add(classRoom));
+        return ResponseEntity.ok(classRoomService.add(classRoom));
     }
 
     @DeleteMapping("remove/{id}")
-    public CommonResponse remove(@PathVariable Long id){
+    public ResponseEntity<Void> remove(@PathVariable Long id){
         classRoomService.remove(id);
-        return CommonResponse.ok();
+        return ResponseEntity.ok().build();
     }
 
 
 
     @GetMapping("findAll")
-    public CommonResponse findAll(){
-        return CommonResponse.ok(classRoomService.findAll());
+    public ResponseEntity<List<ClassRoom>> findAll(){
+        return ResponseEntity.ok().body(classRoomService.findAll());
     }
 
     @PutMapping("update")
-    public CommonResponse update(@RequestBody ClassRoom classRoom){
-        return CommonResponse.ok(classRoomService.update(classRoom));
+    public ResponseEntity<Integer> update(@RequestBody ClassRoom classRoom){
+        return ResponseEntity.ok(classRoomService.update(classRoom));
     }
 
 

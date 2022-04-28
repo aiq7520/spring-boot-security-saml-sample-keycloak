@@ -1,7 +1,6 @@
 package com.vdenotaris.spring.boot.security.saml.web.common.exception;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author Mr Ge
@@ -10,31 +9,18 @@ import lombok.NoArgsConstructor;
  *
  * 自定义异常
  */
-@NoArgsConstructor
-@Data
 public class ResultException extends RuntimeException {
-    private String msg;
-    private int code = 500;
-    public ResultException(String msg) {
-        super(msg);
-        this.msg =msg;
-    }
+    private HttpStatus status ;
 
-    public ResultException(String msg,  Throwable e) {
-        super(msg, e);
-        this.msg = msg;
+    public  <T> ResultException(T message,HttpStatus status){
+        super(message.toString());
+        this.status = status;
     }
-
-    public ResultException(String msg, int code) {
-        super(msg);
-        this.msg = msg;
-        this.code = code;
+    public  <T> ResultException(T message){
+        super(message.toString());
+        this.status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
-
-    public ResultException(String msg, int code, Throwable e) {
-        super(msg, e);
-        this.msg = msg;
-        this.code = code;
+    public HttpStatus getStatus() {
+        return status;
     }
-
 }

@@ -1,9 +1,9 @@
 package com.vdenotaris.spring.boot.security.saml.web.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vdenotaris.spring.boot.security.saml.web.common.utils.CommonResponse;
-import org.mariadb.jdbc.internal.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
  * @ClassName LoginFailureHandler
@@ -29,7 +28,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e)
             throws IOException, ServletException {
         httpServletResponse.setContentType("application/json;charset=UTF-8");
-        CommonResponse responseObj = CommonResponse.error(500,e.getMessage(),e);
+        ResponseEntity responseObj = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         httpServletResponse.getWriter().write(objectMapper.writeValueAsString(responseObj));
     }
 }

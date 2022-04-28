@@ -2,6 +2,8 @@ package com.vdenotaris.spring.boot.security.saml.web.dao;
 
 import com.vdenotaris.spring.boot.security.saml.web.entity.SysUser;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * @ClassName SysUserDao

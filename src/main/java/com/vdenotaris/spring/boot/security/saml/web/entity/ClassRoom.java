@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * @ClassName ClassRoom
@@ -22,8 +23,9 @@ public class ClassRoom {
     /** 用户ID */
     private Long id;
 
-    private String roomStatus;
+    private String roomStatus="notStart";
 
+    @NotEmpty(message = "class room name can not empty")
     private String name;
 
 

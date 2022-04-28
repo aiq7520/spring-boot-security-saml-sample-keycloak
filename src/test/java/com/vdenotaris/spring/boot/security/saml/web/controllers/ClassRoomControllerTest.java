@@ -1,9 +1,7 @@
 package com.vdenotaris.spring.boot.security.saml.web.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vdenotaris.spring.boot.security.saml.web.Application;
 import com.vdenotaris.spring.boot.security.saml.web.CommonTestSupport;
-import com.vdenotaris.spring.boot.security.saml.web.common.utils.CommonResponse;
 import com.vdenotaris.spring.boot.security.saml.web.entity.ClassRoom;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -23,8 +21,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
-
-import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class ClassRoomControllerTest extends CommonTestSupport {
-
     private Long classRoomId = 2L;
 
 
@@ -60,8 +55,8 @@ public class ClassRoomControllerTest extends CommonTestSupport {
     @Test
     @Transactional
     @Rollback
-    public void add() throws Exception {
-        ClassRoom classRoom = new ClassRoom("notStart","controller_test_add");
+    public void add_no_default_status() throws Exception {
+        ClassRoom classRoom = new ClassRoom("finish","controller_test_add");
         mockMvc.perform(post("/classRoom/add")
                .contentType(MediaType.APPLICATION_JSON)
                .content(objectMapper.writeValueAsString(classRoom))
@@ -83,8 +78,8 @@ public class ClassRoomControllerTest extends CommonTestSupport {
                         .session(mockHttpSession(true)))
                 .andExpect(status().isOk()).andReturn();
 
-        CommonResponse commonResponse = parseCommonResponse(mvcResult.getResponse());
-        Assert.assertEquals(500,commonResponse.get(CommonResponse.STATUS));
+        ResponseEntity commonResponse = parseCommonResponse(mvcResult.getResponse());
+        Assert.assertEquals(500,commonResponse.getStatusCodeValue());
     }
 
     @Test

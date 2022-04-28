@@ -1,9 +1,9 @@
 package com.vdenotaris.spring.boot.security.saml.web.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vdenotaris.spring.boot.security.saml.web.common.utils.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -29,6 +29,6 @@ public class UsernamePasswordLogoutSuccessHandler implements LogoutSuccessHandle
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("LogoutHandler logout ");
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString(CommonResponse.ok()));
+        response.getWriter().write(objectMapper.writeValueAsString(ResponseEntity.ok().build()));
     }
 }

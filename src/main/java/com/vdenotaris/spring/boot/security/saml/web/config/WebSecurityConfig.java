@@ -556,7 +556,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
 
     @Bean @Qualifier("idp-keycloak")
     public ExtendedMetadataDelegate keycloakExtendedMetadataProvider(Environment env) throws MetadataProviderException {
-        String idpKeycloakMetadataURL = env.getRequiredProperty("keycloak.auth-server-url") + "/protocol/saml/descriptor";
+        String idpKeycloakMetadataURL = env.getRequiredProperty("keycloak.auth-server-url") ;
         return getExtendedMetadataDelegate(idpKeycloakMetadataURL);
     }
 

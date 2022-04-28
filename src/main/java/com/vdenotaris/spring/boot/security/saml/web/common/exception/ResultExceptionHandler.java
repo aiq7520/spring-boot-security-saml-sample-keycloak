@@ -1,7 +1,8 @@
 package com.vdenotaris.spring.boot.security.saml.web.common.exception;
 
-import com.vdenotaris.spring.boot.security.saml.web.common.utils.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Mr Ge
@@ -28,49 +30,49 @@ public class ResultExceptionHandler {
      * 处理自定义异常
      */
     @ExceptionHandler(ResultException.class)
-    public CommonResponse handleRRException(ResultException e){
+    public ResponseEntity handleRRException(ResultException e){
         log.warn(e.getMessage(), e.toString());
-        return CommonResponse.error(505,e.getMsg(),e);
+        return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
     @ExceptionHandler(BindException.class)
-    public CommonResponse handleBindException(BindException e){
+    public ResponseEntity handleBindException(BindException e){
         log.warn(e.getMessage(), e.toString());
         BindingResult bindingResult = e.getBindingResult();
         return doValidate(bindingResult);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public CommonResponse handleBindException(MethodArgumentNotValidException e){
+    public ResponseEntity handleBindException(MethodArgumentNotValidException e){
         log.warn(e.getMessage(), e.toString());
         BindingResult bindingResult = e.getBindingResult();
         return doValidate(bindingResult);
     }
 
-    private CommonResponse doValidate(BindingResult bindingResult){
+    private ResponseEntity doValidate(BindingResult bindingResult){
         List<ObjectError> allErrors = bindingResult.getAllErrors();
-        AtomicReference<String> msg = new AtomicReference<>("");
+        Set<String> msg = new TreeSet<String>();
         allErrors.forEach(o ->{
-            msg.set(o.getDefaultMessage()+";" + msg);
+            msg.add(o.getDefaultMessage());
         });
-        return CommonResponse.error(400,msg.toString());
+        return new ResponseEntity(msg.toString(),HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public CommonResponse handleServletRequestBindingException(MissingServletRequestParameterException e){
+    public ResponseEntity handleServletRequestBindingException(MissingServletRequestParameterException e){
         log.warn(e.getMessage(), e.toString());
-        return CommonResponse.error(400,"请求参数异常",e);
+        return new ResponseEntity("request param error",HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
-    public CommonResponse handleException(Exception e){
+    public ResponseEntity handleException(Exception e){
         log.error(e.getMessage(), e);
-        return CommonResponse.error("服务器异常，请稍后再试！",e);
+        return  new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public CommonResponse handleException(UsernameNotFoundException e){
+    public ResponseEntity handleException(UsernameNotFoundException e){
         log.error(e.getMessage(), e);
-        return  CommonResponse.error(505,e.getMessage(),e);
+        return  new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

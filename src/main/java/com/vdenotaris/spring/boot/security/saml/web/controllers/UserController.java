@@ -1,12 +1,14 @@
 package com.vdenotaris.spring.boot.security.saml.web.controllers;
 
-import com.vdenotaris.spring.boot.security.saml.web.common.utils.CommonResponse;
 import com.vdenotaris.spring.boot.security.saml.web.entity.SysUser;
 import com.vdenotaris.spring.boot.security.saml.web.service.SysUserService;
 import com.vdenotaris.spring.boot.security.saml.web.stereotypes.CurrentUser;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 /**
@@ -25,25 +27,24 @@ public class UserController {
     }
 
     @GetMapping("info")
-    public CommonResponse info(@CurrentUser  User user){
-        return CommonResponse.ok(user.getUsername());
+    public ResponseEntity<String> info(@CurrentUser  User user){
+        return ResponseEntity.ok(user.getUsername());
     }
 
     @GetMapping("list")
-    public CommonResponse list(){
-        return CommonResponse.ok(userService.loadAll());
+    public ResponseEntity<List<SysUser>> list(){
+        return ResponseEntity.ok(userService.loadAll());
     }
 
     @DeleteMapping("remove/{id}")
-    public CommonResponse remove(@PathVariable Long id){
+    public ResponseEntity<Void> remove(@PathVariable Long id){
         userService.deleted(id);
-        return CommonResponse.ok();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("add")
-    public CommonResponse add(@RequestBody SysUser user){
-        userService.register(user);
-        return CommonResponse.ok();
+    public ResponseEntity<SysUser> add(@RequestBody @Validated SysUser user){
+        return ResponseEntity.ok(userService.register(user));
     }
 
 }

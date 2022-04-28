@@ -18,7 +18,7 @@ public interface SysUserService {
      * @param user
      * @return
      */
-    void register(SysUser user);
+    SysUser register(SysUser user);
 
 
     /**
@@ -36,6 +36,5 @@ public interface SysUserService {
 
 
     List<SysUser> loadAll();
-
 
 }
