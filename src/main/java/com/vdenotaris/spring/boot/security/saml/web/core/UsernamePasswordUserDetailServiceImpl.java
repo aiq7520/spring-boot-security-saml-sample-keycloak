@@ -41,7 +41,7 @@ public class UsernamePasswordUserDetailServiceImpl implements UserDetailsService
     public UserDetails loadUserByUsername(String username)throws UsernameNotFoundException {
         SysUser sysUser = userService.findByUserName(username);
         if(sysUser==null){
-            throw new ResultException(username + " do not exist!");
+            throw new ResultException(username + " do not exist!",HttpStatus.INTERNAL_SERVER_ERROR);
         }
         log.info(username + " is logged in");
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();

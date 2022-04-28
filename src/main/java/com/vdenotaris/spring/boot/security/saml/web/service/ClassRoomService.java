@@ -15,4 +15,8 @@ public interface ClassRoomService {
     void remove(Long id);
     Integer update(ClassRoom classRoom);
     List<ClassRoom>  findAll();
+
+    ClassRoom findByName(String name);
+
+    ClassRoom findById(Long id);
 }

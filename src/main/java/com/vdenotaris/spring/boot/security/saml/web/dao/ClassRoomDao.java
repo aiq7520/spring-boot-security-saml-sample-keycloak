@@ -17,10 +17,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClassRoomDao extends JpaRepository<ClassRoom,Long> {
 
-//    Integer deleteByName(String name);
-//    ClassRoom findByName(String name);
+    ClassRoom findByName(String name);
 
-    @Query("update ClassRoom cr set cr.roomStatus= :#{classRoom.roomStatus} where cr.id = :#{classRoom.id}")
+    @Query("update ClassRoom cr set cr.roomStatus= :#{#classRoom.roomStatus} where cr.id = :#{#classRoom.id}")
     @Modifying
     Integer updateStatus(ClassRoom classRoom);
 }

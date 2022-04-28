@@ -40,11 +40,10 @@ public class SSOTest extends CommonTestSupport{
                 .param("username", "noExist")
                 .param("password", "123456")
         ).andExpect(status().isOk()).andReturn().getResponse();
-        ResponseEntity commonResponse = objectMapper.readValue(response.getContentAsString(),ResponseEntity.class);
 
 
-        Assert.assertEquals(500,commonResponse.getStatusCodeValue());
-        Assert.assertEquals("admin1 do not exist!",commonResponse.getBody());
+        String expected ="{\"headers\":{},\"body\":\"noExist do not exist!\",\"statusCode\":\"INTERNAL_SERVER_ERROR\",\"statusCodeValue\":500}";
+        Assert.assertEquals(expected,response.getContentAsString());
     }
 
     @Test
@@ -54,11 +53,10 @@ public class SSOTest extends CommonTestSupport{
                 .param("username", "admin")
                 .param("password", "1234561")
         ).andExpect(status().isOk()).andReturn().getResponse();
-        ResponseEntity commonResponse = objectMapper.readValue(response.getContentAsString(),ResponseEntity.class);
 
 
-        Assert.assertEquals(500,commonResponse.getStatusCodeValue());
-        Assert.assertEquals("Bad credentials",commonResponse.getBody());
+        String expected ="{\"headers\":{},\"body\":\"Bad credentials\",\"statusCode\":\"INTERNAL_SERVER_ERROR\",\"statusCodeValue\":500}";
+        Assert.assertEquals(expected,response.getContentAsString());
     }
 
 

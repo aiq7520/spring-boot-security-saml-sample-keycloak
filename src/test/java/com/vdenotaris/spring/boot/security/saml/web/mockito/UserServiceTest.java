@@ -5,18 +5,14 @@ import com.vdenotaris.spring.boot.security.saml.web.common.exception.ResultExcep
 import com.vdenotaris.spring.boot.security.saml.web.dao.SysUserDao;
 import com.vdenotaris.spring.boot.security.saml.web.entity.SysUser;
 import com.vdenotaris.spring.boot.security.saml.web.service.SysUserService;
-import com.vdenotaris.spring.boot.security.saml.web.service.SysUserServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
  * @ClassName UserControllerTest

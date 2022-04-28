@@ -33,4 +33,8 @@ public class ClassRoom {
         this.roomStatus = roomStatus;
         this.name = name;
     }
+
+    public ClassRoom(String name) {
+        this.name = name;
+    }
 }

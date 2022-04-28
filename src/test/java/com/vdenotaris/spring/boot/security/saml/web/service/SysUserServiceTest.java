@@ -48,14 +48,7 @@ public class SysUserServiceTest {
 
     }
 
-    @Test
-    @Transactional
-    @Rollback
-    public void register_user() {
-        String username = UUID.randomUUID().toString().substring(0,10);
-        SysUser existUser = new SysUser(username,UUID.randomUUID().toString());
-        userService.register(existUser);
-    }
+
 
     @Test
     public void test_find_by_username() {

@@ -44,5 +44,15 @@ public class ClassRoomServiceImpl implements ClassRoomService{
         return classRoomDao.findAll();
     }
 
+    @Override
+    public ClassRoom findByName(String name) {
+        return classRoomDao.findByName(name);
+    }
+
+    @Override
+    public ClassRoom findById(Long id) {
+        return classRoomDao.findById(id).get();
+    }
+
 
 }
